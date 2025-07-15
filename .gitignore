@@ -32,3 +32,5 @@ go.work.sum
 # .vscode/
 
 *.mmdb
+
+.DS_Store
