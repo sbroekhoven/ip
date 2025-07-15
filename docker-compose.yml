@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: ipapp
+    ports:
+      - "5001:5001"
+    environment:
+      - PORT=5001
