@@ -79,9 +79,16 @@ func main() {
 	// Create router
 	router := gin.New()
 
-	// Set trusted proxies
-	router.SetTrustedProxies([]string{"172.18.0.0/16"}) // adjust to match your Docker network
+	// Set trusted proxies from env
+	proxyCIDRs := os.Getenv("TRUSTED_PROXIES")
+	if proxyCIDRs == "" {
+		proxyCIDRs = "172.18.0.0/16" // default: Docker bridge network
+	}
+	cidrs := strings.Split(proxyCIDRs, ",")
 
+	if err := router.SetTrustedProxies(cidrs); err != nil {
+		log.Fatalf("error=trusted_proxy_config_failed detail=%v", err)
+	}
 	// Basic structured logging
 	router.Use(gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
 		return fmt.Sprintf("status=%d method=%s path=%s ip=%s ua=%q duration=%s\n",

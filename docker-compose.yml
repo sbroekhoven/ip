@@ -8,3 +8,4 @@ services:
       - "5001:5001"
     environment:
       - PORT=5001
+      - TRUSTED_PROXIES=172.18.0.0/16
