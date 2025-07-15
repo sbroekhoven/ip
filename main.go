@@ -79,6 +79,9 @@ func main() {
 	// Create router
 	router := gin.New()
 
+	// Set trusted proxies
+	router.SetTrustedProxies([]string{"172.18.0.0/16"}) // adjust to match your Docker network
+
 	// Basic structured logging
 	router.Use(gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
 		return fmt.Sprintf("status=%d method=%s path=%s ip=%s ua=%q duration=%s\n",
