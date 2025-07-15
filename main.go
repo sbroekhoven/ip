@@ -22,6 +22,8 @@ type VisitorInfo struct {
 
 var geoDB *geoip2.Reader
 
+// getClientIP gets the client's IP address from the request. It first tries to use the value
+// of the X-Real-IP header, then falls back to the RemoteAddr field of the request object.
 func getClientIP(c *gin.Context) string {
 	realIP := c.Request.Header.Get("X-Real-IP")
 	if realIP != "" {
@@ -34,6 +36,8 @@ func getClientIP(c *gin.Context) string {
 	return host
 }
 
+// enrichGeoInfo takes an IP address in string format and returns the country and city names
+// associated with that IP address.
 func enrichGeoInfo(ipStr string) (country string, city string) {
 	ip := net.ParseIP(ipStr)
 	if ip == nil || geoDB == nil {
@@ -53,6 +57,7 @@ func enrichGeoInfo(ipStr string) (country string, city string) {
 	return country, city
 }
 
+// main sets up a web server and handles HTTP requests.
 func main() {
 	// Configure logger
 	gin.DefaultWriter = os.Stdout
