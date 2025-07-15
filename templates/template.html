@@ -14,10 +14,10 @@
     </header>
 
     <main>
-        <p><strong>IP Address:</strong> {{ .IP }}</p>
-        <p><strong>User-Agent:</strong> {{ .UserAgent }}</p>
-        <p><strong>Country:</strong> {{ .Country }}</p>
-        <p><strong>City:</strong> {{ .City }}</p>
+        <p>This page shows your IP address, browser user agent, and approximate location using GeoLite2 data from
+            MaxMind. You can also query this endpoint from command-line tools to retrieve the information in plain text
+            or JSON.</p>
+
 
         <table>
             <tbody>
@@ -29,17 +29,29 @@
                     <td>User-Agent:</td>
                     <td>{{ .UserAgent }}</td>
                 </tr>
-                <tr>
+                {{ if .Country }}<tr>
                     <td>Country:</td>
                     <td>{{ .Country }}</td>
-                </tr>
-                <tr>
+                </tr>{{ end }}
+                {{ if .City }}<tr>
                     <td>City:</td>
-                    <td>{{ .City }}</td>
+                    <td>{{ .City }}</td>{{ end }}
                 </tr>
             </tbody>
         </table>
     </main>
+
+    <h2>Examples</h2>
+    <p>You can use the following commands to get your visitor information in different formats:</p>
+
+    <h3>Plain Text (Linux/macOS):</h3>
+    <pre><code>curl -H "Accept: text/plain" https://ip.sbro.nl/</code></pre>
+
+    <h3>JSON (Linux/macOS):</h3>
+    <pre><code>curl -H "Accept: application/json" https://ip.sbro.nl/</code></pre>
+
+    <h3>PowerShell (Windows):</h3>
+    <pre><code>Invoke-WebRequest -Headers @{Accept='application/json'} https://ip.sbro.nl/ | Select-Object -ExpandProperty Content</code></pre>
 
     <footer>
         <p>Location data provided by <a href="https://www.maxmind.com" target="_blank">MaxMind GeoLite2</a></p>
