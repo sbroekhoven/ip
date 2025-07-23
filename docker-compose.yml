@@ -9,3 +9,4 @@ services:
     environment:
       - PORT=5001
       - TRUSTED_PROXIES=172.18.0.0/16
+      - ALLOWED_ORIGINS=https://me.sbro.nl

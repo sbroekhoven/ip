@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/oschwald/geoip2-golang"
 )
@@ -57,6 +58,14 @@ func enrichGeoInfo(ipStr string) (country string, city string) {
 	return country, city
 }
 
+func getAllowedOrigins() []string {
+	origins := os.Getenv("ALLOWED_ORIGINS")
+	if origins == "" {
+		return []string{"http://localhost:3000"} // default for development
+	}
+	return strings.Split(origins, ",")
+}
+
 // main sets up a web server and handles HTTP requests.
 func main() {
 	// Configure logger
@@ -78,6 +87,13 @@ func main() {
 
 	// Create router
 	router := gin.New()
+
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     getAllowedOrigins(),
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		AllowCredentials: true,
+	}))
 
 	// Set trusted proxies from env
 	proxyCIDRs := os.Getenv("TRUSTED_PROXIES")
